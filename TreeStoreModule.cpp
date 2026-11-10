@@ -2,7 +2,7 @@
 
 void Item::print() const {
     if (id == -1) {
-        std::cout << "None (элемент не найден)";
+        std::cout << "None";
         return;
     }
     std::cout << "{id: " << id << ", parent: ";
@@ -37,11 +37,11 @@ TreeStore::TreeStore(std::vector<Item> items) {
         Item current = items[i];
 
         if (current.id <= 0 || current.id == current.parent) {
-            std::cout << "Ошибка: некорректный id = " << current.id << "\n";
+            std::cout << "Error: invalid id = " << current.id << "\n";
             continue;
         }
         if (items_by_id.count(current.id) > 0) {
-            std::cout << "Ошибка: дубликат id = " << current.id << " пропущен\n";
+            std::cout << "Error: duplicate id = " << current.id << "\n";
             continue;
         }
 
@@ -86,7 +86,7 @@ std::vector<Item> TreeStore::getAllParents(int id) {
     while (current.id != -1 && current.parent != -1) {
         steps++;
         if (steps > max_steps) {
-            std::cout << "Ошибка: обнаружен цикл в дереве родителей!\n";
+            std::cout << "Error: cycle in parents\n";
             break;
         }
 
