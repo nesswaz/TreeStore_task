@@ -5,7 +5,6 @@ void Item::print() const {
         std::cout << "None (элемент не найден)";
         return;
     }
-
     std::cout << "{id: " << id << ", parent: ";
     if (parent == -1) {
         std::cout << "\"root\"";
@@ -23,6 +22,7 @@ void Item::print() const {
 
 void printVector(std::vector<Item> vec) {
     std::cout << "[";
+
     for (int i = 0; i < (int)vec.size(); i++) {
         vec[i].print();
         if (i + 1 < (int)vec.size()) {
@@ -32,13 +32,16 @@ void printVector(std::vector<Item> vec) {
     std::cout << "]\n";
 }
 
-
 TreeStore::TreeStore(std::vector<Item> items) {
     for (int i = 0; i < (int)items.size(); i++) {
         Item current = items[i];
 
         if (current.id <= 0 || current.id == current.parent) {
-            std::cout << "Ошибка данных: некорректный id = " << current.id << "\n";
+            std::cout << "Ошибка: некорректный id = " << current.id << "\n";
+            continue;
+        }
+        if (items_by_id.count(current.id) > 0) {
+            std::cout << "Ошибка: дубликат id = " << current.id << " пропущен\n";
             continue;
         }
 
@@ -77,9 +80,17 @@ std::vector<Item> TreeStore::getAllParents(int id) {
     std::vector<Item> parents;
     Item current = getItem(id);
 
-    while (current.id != -1 && current.parent != -1) {
-        Item parent_item = getItem(current.parent);
+    int steps = 0;
+    int max_steps = (int)all_items.size();
 
+    while (current.id != -1 && current.parent != -1) {
+        steps++;
+        if (steps > max_steps) {
+            std::cout << "Ошибка: обнаружен цикл в дереве родителей!\n";
+            break;
+        }
+
+        Item parent_item = getItem(current.parent);
         if (parent_item.id != -1) {
             parents.push_back(parent_item);
         }
