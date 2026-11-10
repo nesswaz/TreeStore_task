@@ -2,8 +2,6 @@
 #include "TreeStoreH.h"
 
 int main() {
-    setlocale(LC_ALL, "Russian");
-
     std::vector<Item> items = {
         {1, -1, "test"},
         {2, 1, "test"},
@@ -17,6 +15,7 @@ int main() {
 
     TreeStore ts(items);
 
+    std::cout << std::endl;
     std::cout << "1. ts.getAll():\n";
     printVector(ts.getAll());
 
@@ -34,5 +33,9 @@ int main() {
     std::cout << "\n5. ts.getAllParents(7):\n";
     printVector(ts.getAllParents(7));
 
+    std::cout << "\n6. ts.getItem(999):\n";
+    Item item999 = ts.getItem(999);
+    item999.print();
+    std::cout << "\n";
     return 0;
 }
