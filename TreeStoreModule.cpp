@@ -34,10 +34,15 @@ void printVector(std::vector<Item> vec) {
 
 
 TreeStore::TreeStore(std::vector<Item> items) {
-    all_items = items;
-
     for (int i = 0; i < (int)items.size(); i++) {
         Item current = items[i];
+
+        if (current.id <= 0 || current.id == current.parent) {
+            std::cout << "Ошибка данных: некорректный id = " << current.id << "\n";
+            continue;
+        }
+
+        all_items.push_back(current);
         items_by_id[current.id] = current;
 
         if (current.parent != -1) {
@@ -74,7 +79,7 @@ std::vector<Item> TreeStore::getAllParents(int id) {
 
     while (current.id != -1 && current.parent != -1) {
         Item parent_item = getItem(current.parent);
-        
+
         if (parent_item.id != -1) {
             parents.push_back(parent_item);
         }
